@@ -24,5 +24,15 @@ namespace Tetris
         {
             InitializeComponent();
         }
+
+        private void Windows_KeyDown(object sender, KeyEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void GameCanvas_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
