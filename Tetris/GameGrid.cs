@@ -1,7 +1,4 @@
-﻿// ------------------------------------------------------------------
-// © Copyright 2022 Thermo Fisher Scientific Inc. All rights reserved.
-// ------------------------------------------------------------------
-namespace Tetris
+﻿namespace Tetris
 {
     public class GameGrid
     {
