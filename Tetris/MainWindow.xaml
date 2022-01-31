@@ -23,7 +23,7 @@
             <ImageBrush ImageSource="Assets/Background.png"/>
         </Grid.Background>
         <Viewbox Grid.Row="1" Grid.Column="1" Margin="0,0,0,20">
-            <Canvas x:Name="GameCanvas" Background="#101010" Width="250" Height="500" ClipToBounds="True" Loaded="GameCanvas_OnLoaded"/>
+            <Canvas x:Name="GameCanvas" Background="#101010" Width="250" Height="510" ClipToBounds="True" Loaded="GameCanvas_OnLoaded"/>
         </Viewbox>
         <TextBlock x:Name="ScoreText" Grid.Row="0" Grid.Column="1" Text="Score: " Margin="0,10" TextAlignment="Center"/>
         <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">

@@ -45,8 +45,28 @@ namespace Tetris
         {
             DrawGrid(gameState.GameGrid);
             DrawBlock(gameState.CurrentBlock);
+            DrawNextBlock(gameState.BlockQueue);
+            DrawHeldBlock(gameState.HeldBlock);
+            ScoreText.Text = $"Score: {gameState.Score}";
         }
 
+        private void DrawNextBlock(BlockQueue blockQueue)
+        {
+            var nextBlock = blockQueue.NextBlock;
+            NextImage.Source = m_blockImages[nextBlock.Id];
+        }
+
+        private void DrawHeldBlock(Block? heldBlock)
+        {
+            if (heldBlock == null)
+            {
+                HoldImage.Source = m_blockImages[0];
+            }
+            else
+            {
+                HoldImage.Source = m_blockImages[heldBlock.Id];
+            }
+        }
         private async Task GameLoop()
         {
             Draw(m_gameState);
@@ -59,6 +79,7 @@ namespace Tetris
             }
 
             GameOverGrid.Visibility = Visibility.Visible;
+            FinalScore.Text = $"Score: {m_gameState.Score}";
         }
 
         private Image[,] SetupGameCanvas(GameGrid gameGrid)
@@ -75,7 +96,7 @@ namespace Tetris
                     {
                         Height = cellSize, Width = cellSize
                     };
-                    Canvas.SetTop(imageControl, (row - 2) * cellSize);
+                    Canvas.SetTop(imageControl, (row - 2) * cellSize + 10);
                     Canvas.SetLeft(imageControl, column * cellSize);
                     GameCanvas.Children.Add(imageControl);
                     imageControls[row, column] = imageControl;
@@ -109,6 +130,10 @@ namespace Tetris
 
                 case Key.Z:
                     m_gameState.RotateBlockCounterClockWise();
+                    break;
+
+                case Key.C:
+                    m_gameState.HoldBlock();
                     break;
 
                 default:

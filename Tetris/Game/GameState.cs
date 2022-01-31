@@ -9,6 +9,7 @@ namespace Tetris.Game
             GameGrid = new GameGrid(22, 10);
             BlockQueue = new BlockQueue();
             CurrentBlock = BlockQueue.GetAndUpdate();
+            CanHold = true;
         }
 
         public Block CurrentBlock
@@ -18,12 +19,24 @@ namespace Tetris.Game
             {
                 m_currentBlock = value;
                 m_currentBlock.Reset();
+
+                for (int row = 0; row < 2; row++)
+                {
+                    m_currentBlock.Move(1, 0);
+                    if (!BlockFits())
+                    {
+                        m_currentBlock.Move(-1, 0);
+                    }
+                }
             }
         }
 
+        public int Score { get; private set; }
         public GameGrid GameGrid { get; }
         public BlockQueue BlockQueue { get; }
         public bool GameOver { get; private set; }
+        public Block? HeldBlock { get; private set; }
+        public bool CanHold { get; private set; }
 
         public void RotateBlockClockWise()
         {
@@ -75,6 +88,24 @@ namespace Tetris.Game
                 PlaceBlock();
             }
         }
+
+        public void HoldBlock()
+        {
+            if(!CanHold) return;
+
+            if (HeldBlock == null)
+            {
+                HeldBlock = CurrentBlock;
+                CurrentBlock = BlockQueue.GetAndUpdate();
+            }
+            else
+            {
+                (CurrentBlock, HeldBlock) = (HeldBlock, CurrentBlock);
+            }
+
+            CanHold = false;
+        }
+
         private bool BlockFits()
         {
             foreach (var position in CurrentBlock.TilePositions())
@@ -100,7 +131,7 @@ namespace Tetris.Game
                 GameGrid[position.Row, position.Column] = CurrentBlock.Id;
             }
 
-            GameGrid.ClearFullRows();
+            Score += GameGrid.ClearFullRows();
 
             if (IsGameOver())
             {
@@ -109,6 +140,7 @@ namespace Tetris.Game
             else
             {
                 CurrentBlock = BlockQueue.GetAndUpdate();
+                CanHold = true;
             }
         }
 
