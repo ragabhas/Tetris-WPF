@@ -144,6 +144,18 @@ namespace Tetris.Game
             }
         }
 
+        private int TilesDropDistance(Position position)
+        {
+            var drop = 0;
+
+            while (GameGrid.IsEmpty(position.Row + drop +1, position.Column))
+            {
+                drop++;
+            }
+
+            return drop;
+        }
+
         #region private fields and constants
         private Block m_currentBlock;
         #endregion
