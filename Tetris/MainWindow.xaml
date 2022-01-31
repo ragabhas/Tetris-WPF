@@ -36,7 +36,7 @@
             <Image x:Name="NextImage" Margin="20" Height="125"/>
         </StackPanel>
 
-        <Grid Grid.RowSpan="2" Grid.Column="3" Background="#CC000000" Visibility="Hidden">
+        <Grid x:Name="GameOverGrid" Grid.RowSpan="2" Grid.ColumnSpan="3" Background="#CC000000" Visibility="Hidden">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Text="Game Over" FontSize="48" TextAlignment="Center"/>
                 <TextBlock x:Name="FinalScore" Text="Final Score: " TextAlignment="Center"/>

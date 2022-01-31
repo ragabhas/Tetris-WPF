@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -46,6 +47,20 @@ namespace Tetris
             DrawBlock(gameState.CurrentBlock);
         }
 
+        private async Task GameLoop()
+        {
+            Draw(m_gameState);
+
+            while (!m_gameState.GameOver)
+            {
+                await Task.Delay(500);
+                m_gameState.MoveBlockDown();
+                Draw(m_gameState);
+            }
+
+            GameOverGrid.Visibility = Visibility.Visible;
+        }
+
         private Image[,] SetupGameCanvas(GameGrid gameGrid)
         {
             var imageControls = new Image[gameGrid.Rows, gameGrid.Columns];
@@ -72,17 +87,47 @@ namespace Tetris
 
         private void Windows_KeyDown(object sender, KeyEventArgs e)
         {
-            throw new NotImplementedException();
-        }
+            if (m_gameState.GameOver) return;
 
-        private void GameCanvas_OnLoaded(object sender, RoutedEventArgs e)
-        {
+            switch (e.Key)
+            {
+                case Key.Left:
+                    m_gameState.MoveBlockLeft();
+                    break;
+
+                case Key.Right:
+                    m_gameState.MoveBlockRight();
+                    break;
+
+                case Key.Down:
+                    m_gameState.MoveBlockDown();
+                    break;
+
+                case Key.Up:
+                    m_gameState.RotateBlockClockWise();
+                    break;
+
+                case Key.Z:
+                    m_gameState.RotateBlockCounterClockWise();
+                    break;
+
+                default:
+                    return;
+            }
+
             Draw(m_gameState);
         }
 
-        private void Play_Again(object sender, RoutedEventArgs e)
+        private async void GameCanvas_OnLoaded(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            await GameLoop();
+        }
+
+        private async void Play_Again(object sender, RoutedEventArgs e)
+        {
+            m_gameState = new GameState();
+            GameOverGrid.Visibility = Visibility.Hidden;
+            await GameLoop();
         }
 
         #region private fields and constants
@@ -106,7 +151,7 @@ namespace Tetris
             new BitmapImage(new Uri("Assets/TileCyan.png", UriKind.Relative)),
             new BitmapImage(new Uri("Assets/TileBlue.png", UriKind.Relative)),
             new BitmapImage(new Uri("Assets/TileOrange.png", UriKind.Relative)),
-            new BitmapImage(new Uri("Assets/TileYello.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/TileYellow.png", UriKind.Relative)),
             new BitmapImage(new Uri("Assets/TileGreen.png", UriKind.Relative)),
             new BitmapImage(new Uri("Assets/TilePurple.png", UriKind.Relative)),
             new BitmapImage(new Uri("Assets/TileRed.png", UriKind.Relative))
